@@ -1,0 +1,139 @@
+---
+title: "Reveal.js Tabset"
+subtitle: "Quarto Extension"
+author:
+  - name: "Mickaël CANOUIL, _Ph.D._"
+    orcid: "0000-0002-3396-4549"
+    url: "https://mickael.canouil.fr"
+format:
+  revealjs:
+    output-file: index
+    incremental: true
+    pdf-separate-fragments: true
+revealjs-plugins:
+  - tabset
+---
+
+# Introduction
+
+## What is Reveal.js Tabset?
+
+This extension brings proper tabset support to Reveal.js presentations.
+
+- Navigate through tabs using arrow keys or space bar.
+- Tabs are treated as fragments.
+- PDF export support.
+
+## How it works
+
+The plugin automatically detects panel tabsets in your slides and enables fragment-based navigation.
+
+## Installation
+
+Install the extension using:
+
+```bash
+quarto add mcanouil/quarto-revealjs-tabset
+```
+
+## Basic Setup
+
+Add to your document YAML:
+
+```yaml
+format:
+  revealjs: default
+revealjs-plugins:
+  - tabset
+```
+
+For PDF export with separate slides per tab:
+
+```yaml
+format:
+  revealjs:
+    pdf-separate-fragments: true
+```
+
+# Basic Example
+
+## Simple Tabset
+
+:::: {.panel-tabset}
+
+### Tab 1
+
+This is the content of the first tab.
+
+- Point 1.
+- Point 2.
+- Point 3.
+
+### Tab 2
+
+This is the content of the second tab.
+
+- Different point 1.
+- Different point 2.
+- Different point 3.
+
+### Tab 3
+
+This is the content of the third tab.
+
+**Bold text** and _italic text_.
+
+:::
+
+# Advanced Example
+
+## Tabset with Fragments
+
+:::: {.panel-tabset}
+
+### Introduction
+
+This tab contains fragments.
+
+:::: {.fragment}
+First fragment appears.
+:::
+
+:::: {.fragment}
+Second fragment appears.
+:::
+
+### Details
+
+More detailed information here.
+
+- Item 1.
+- Item 2.
+- Item 3.
+
+### Conclusion
+
+Summary of the topic.
+
+:::
+
+# Features
+
+## Key Features
+
+1. **Fragment Navigation**: Tabs are treated as fragments, allowing smooth navigation.
+2. **PDF Export**: Correct tab state is preserved in PDF exports.
+3. **Multiple Tabsets**: Support for multiple tabsets per slide.
+4. **Nested Fragments**: Fragments within tabs are properly indexed.
+
+## Usage Tips
+
+- Use arrow keys or space to navigate through tabs.
+- Going backwards (left arrow) returns to the previous tab.
+- Works seamlessly with Quarto's native tabset syntax.
+
+# Thank You
+
+## Questions?
+
+Feel free to ask any questions about the Reveal.js Tabset extension.
