@@ -33,7 +33,7 @@ The plugin automatically detects panel tabsets in your slides and enables fragme
 Install the extension using:
 
 ```bash
-quarto add mcanouil/quarto-revealjs-tabset
+quarto add mcanouil/quarto-revealjs-tabset@1.0.1
 ```
 
 ## Basic Setup
