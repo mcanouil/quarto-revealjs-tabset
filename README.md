@@ -14,7 +14,7 @@ This extension enables fragment-based navigation through panel tabsets, allowing
 ## Installation
 
 ```bash
-quarto add mcanouil/quarto-revealjs-tabset
+quarto add mcanouil/quarto-revealjs-tabset@1.0.1
 ```
 
 This will install the extension under the `_extensions` subdirectory.
