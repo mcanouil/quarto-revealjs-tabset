@@ -9,5 +9,5 @@ authors:
 repository-code: "https://github.com/mcanouil/quarto-revealjs-tabset"
 url: "http://m.canouil.dev/quarto-revealjs-tabset/"
 license: "MIT"
-date-released: "2026-02-11"
-version: 1.0.1
+date-released: "2026-02-21"
+version: 1.1.0
