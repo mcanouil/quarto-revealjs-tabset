@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.2.0 (2026-03-30)
+
 ### Bug Fixes
 
 - fix: Add `aria-hidden="true"` to invisible fragment trigger divs for screen reader compatibility.
