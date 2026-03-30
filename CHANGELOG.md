@@ -2,7 +2,11 @@
 
 ## Unreleased
 
-No user-facing changes.
+### Bug Fixes
+
+- fix: Add `aria-hidden="true"` to invisible fragment trigger divs for screen reader compatibility.
+- fix: Toggle `hidden` attribute on tab panels during PDF export for proper accessibility semantics.
+- fix: Guard against malformed tab index values in fragment and PDF export handlers.
 
 ## 1.1.0 (2026-02-21)
 
