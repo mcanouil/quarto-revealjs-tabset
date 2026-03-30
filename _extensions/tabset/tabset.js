@@ -45,7 +45,9 @@ window.RevealJsTabset = function () {
        * fragment triggers for tab navigation.
        */
       deck.on("ready", function () {
-        const tabsetSlides = document.querySelectorAll(".reveal .slides section .panel-tabset");
+        const tabsetSlides = document.querySelectorAll(
+          ".reveal .slides section .panel-tabset",
+        );
 
         tabsetSlides.forEach(function (tabset) {
           const tabs = tabset.querySelectorAll(TAB_SELECTOR);
@@ -74,6 +76,7 @@ window.RevealJsTabset = function () {
               fragmentDiv.dataset.tabIndex = i + 1;
               fragmentDiv.setAttribute("data-fragment-index", currentIndex);
               fragmentDiv.style.display = "none";
+              fragmentDiv.setAttribute("aria-hidden", "true");
               parentNode.appendChild(fragmentDiv);
               currentIndex++;
             }
@@ -160,6 +163,11 @@ window.RevealJsTabset = function () {
 
             panel.classList.toggle("active", isActive);
             panel.style.display = isActive ? "block" : "none";
+            if (isActive) {
+              panel.removeAttribute("hidden");
+            } else {
+              panel.setAttribute("hidden", "");
+            }
           });
         });
       });
