@@ -1,5 +1,6 @@
 /**
  * @module tabset
+ * @version 1.1.0
  * @license MIT
  * @copyright 2026 Mickaël Canouil
  * @author Mickaël Canouil
