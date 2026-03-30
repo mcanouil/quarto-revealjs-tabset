@@ -1,4 +1,7 @@
-// Copyright (c) 2026 Mickaël Canouil. MIT License.
+// @module tabset
+// @license MIT
+// @copyright 2026 Mickaël Canouil
+// @author Mickaël Canouil
 
 window.RevealJsTabset = function () {
   return {
