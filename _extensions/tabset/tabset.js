@@ -137,7 +137,7 @@ window.RevealJsTabset = function () {
           fragments.forEach(function (fragment) {
             if (fragment.classList.contains("visible")) {
               const tabIndex = parseInt(fragment.dataset.tabIndex, 10);
-              if (tabIndex > activeTabIndex) {
+              if (!isNaN(tabIndex) && tabIndex > activeTabIndex) {
                 activeTabIndex = tabIndex;
               }
             }
