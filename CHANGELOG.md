@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### New Features
+
+- feat: Automatically clone tabset slides for PDF export so each tab appears on its own page without requiring `pdf-separate-fragments: true` globally.
+
 ## 1.2.0 (2026-03-30)
 
 ### Bug Fixes
