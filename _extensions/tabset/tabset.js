@@ -111,6 +111,7 @@ window.RevealJsTabset = function () {
        * @param {number} activeTabIndex - The index of the tab to activate
        */
       function updateTabState(tabset, activeTabIndex) {
+        if (!tabset) return;
         const tabLinks = tabset.querySelectorAll(TAB_LINK_SELECTOR);
         const tabPanesArray = Array.from(getTabPanes(tabset));
 
