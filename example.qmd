@@ -116,7 +116,7 @@ Summary of the topic.
 ## Key Features
 
 1. **Fragment Navigation**: Tabs are treated as fragments, allowing smooth navigation.
-2. **PDF Export**: Correct tab state is preserved in PDF exports.
+2. **PDF Export**: Each tab appears on its own PDF page automatically.
 3. **Multiple Tabsets**: Support for multiple tabsets per slide.
 4. **Nested Fragments**: Fragments within tabs are properly indexed.
 

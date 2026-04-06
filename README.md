@@ -79,15 +79,8 @@ The plugin automatically:
 
 ## PDF Export
 
-For proper PDF export with separate slides for each tab state, you must enable the `pdf-separate-fragments` option in your document YAML:
-
-```yaml
-format:
-  revealjs:
-    pdf-separate-fragments: true
-```
-
-This ensures that each tab appears on a separate page in the exported PDF, allowing viewers to see all tab content sequentially.
+Each tab automatically appears on a separate page when exporting to PDF.
+No additional configuration is needed; the plugin clones tabset slides during export so that every tab gets its own page without requiring `pdf-separate-fragments: true` globally (which would affect all fragments in the deck).
 
 ## Example
 
