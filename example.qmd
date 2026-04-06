@@ -9,7 +9,6 @@ format:
   revealjs:
     output-file: index
     incremental: true
-    pdf-separate-fragments: true
 revealjs-plugins:
   - tabset
 ---
@@ -47,13 +46,8 @@ revealjs-plugins:
   - tabset
 ```
 
-For PDF export with separate slides per tab:
-
-```yaml
-format:
-  revealjs:
-    pdf-separate-fragments: true
-```
+Tabs automatically appear on separate pages when exporting to PDF.
+No additional configuration is needed.
 
 # Basic Example
 
