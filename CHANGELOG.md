@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.4.0 (2026-05-29)
+
 ### New Features
 
 - feat: Add ARIA roles (`tablist`, `tab`, `tabpanel`) and a `presentation` role on tab list items at initialisation, so assistive technology recognises the tabset structure.
