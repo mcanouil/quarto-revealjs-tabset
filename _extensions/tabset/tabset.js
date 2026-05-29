@@ -69,44 +69,10 @@ window.RevealJsTabset = function () {
       }
 
       /**
-       * Wire keyboard navigation (Left/Right/Home/End) within a tablist.
-       * @param {Element} tabset The tabset container element.
-       */
-      function wireKeyboardNavigation(tabset) {
-        const tabLinks = tabset.querySelectorAll(TAB_LINK_SELECTOR);
-        if (tabLinks.length <= 1) return;
-
-        tabLinks.forEach(function (link, index) {
-          link.addEventListener("keydown", function (event) {
-            let targetIndex = null;
-            switch (event.key) {
-              case "ArrowRight":
-                targetIndex = (index + 1) % tabLinks.length;
-                break;
-              case "ArrowLeft":
-                targetIndex = (index - 1 + tabLinks.length) % tabLinks.length;
-                break;
-              case "Home":
-                targetIndex = 0;
-                break;
-              case "End":
-                targetIndex = tabLinks.length - 1;
-                break;
-              default:
-                return;
-            }
-            event.preventDefault();
-            tabLinks[targetIndex].click();
-            tabLinks[targetIndex].focus();
-          });
-        });
-      }
-
-      /**
        * Initialise tabset fragments on ready.
-       * Adds ARIA roles, wires keyboard navigation, optionally activates a non-zero
-       * initial tab via `data-tab-active`, then sets up fragment indices for tab
-       * content and creates invisible fragment triggers for tab navigation.
+       * Adds ARIA roles, optionally activates a non-zero initial tab via
+       * `data-tab-active`, then sets up fragment indices for tab content and
+       * creates invisible fragment triggers for tab navigation.
        */
       deck.on("ready", function () {
         const tabsetSlides = document.querySelectorAll(
@@ -128,8 +94,6 @@ window.RevealJsTabset = function () {
           applyAriaRoles(tabset);
 
           if (tabCount === 1) return;
-
-          wireKeyboardNavigation(tabset);
 
           const initialTabIndex = parseIndex(
             tabset.getAttribute(INITIAL_TAB_ATTR),

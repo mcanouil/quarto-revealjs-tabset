@@ -6,7 +6,7 @@ This extension enables fragment-based navigation through panel tabsets, allowing
 ## Features
 
 - **Fragment Navigation**: Tabs are treated as fragments, enabling smooth keyboard-based navigation.
-- **Keyboard Accessibility**: Left, Right, Home, and End keys move focus and selection within a tablist; full ARIA `tablist`, `tab`, and `tabpanel` roles are applied at init.
+- **ARIA Semantics**: `role="tablist"`, `role="tab"`, and `role="tabpanel"` are applied at init for assistive technology.
 - **Initial Tab Selection**: Set `tab-active="N"` on a tabset (emitted as `data-tab-active` in HTML) to open on a specific tab.
 - **PDF Export Support**: Each tab automatically appears on its own PDF page, with a per-slide opt-out.
 - **Multiple Tabsets**: Support for multiple tabsets per slide.
@@ -65,7 +65,6 @@ Content for the third tab.
 ### Navigation
 
 - Use **arrow keys** or **space bar** to move between fragments, which advances tabs.
-- Within a focused tablist, **Left/Right** keys move between tabs and **Home/End** jump to the first or last tab.
 - Tabs are treated as fragments in the presentation flow.
 
 ### Initial Active Tab
@@ -95,11 +94,10 @@ The plugin automatically:
 
 1. Detects all panel tabsets (`.panel-tabset`) in your slides.
 2. Applies ARIA roles (`tablist`, `tab`, `tabpanel`) for assistive technology.
-3. Wires keyboard navigation (Left/Right/Home/End) within each tablist.
-4. Assigns fragment indices to tab content and any nested fragments.
-5. Creates invisible fragment triggers for tab switching.
-6. Listens to fragment events to switch tabs during navigation.
-7. Ensures correct tab state during PDF export.
+3. Assigns fragment indices to tab content and any nested fragments.
+4. Creates invisible fragment triggers for tab switching.
+5. Listens to fragment events to switch tabs during navigation.
+6. Ensures correct tab state during PDF export.
 
 ## PDF Export
 

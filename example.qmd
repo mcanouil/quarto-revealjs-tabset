@@ -21,7 +21,7 @@ This extension brings proper tabset support to Reveal.js presentations.
 
 - Navigate through tabs using arrow keys or space bar.
 - Tabs are treated as fragments.
-- ARIA roles and keyboard navigation are wired automatically.
+- ARIA roles are wired automatically.
 - PDF export support.
 
 ## How it works
@@ -153,11 +153,10 @@ This tab is hidden during PDF export for this slide only.
 ## Key Features
 
 1. **Fragment Navigation**: Tabs are treated as fragments, allowing smooth navigation.
-2. **Keyboard Accessibility**: Left/Right/Home/End keys move between tabs inside a tablist.
-3. **ARIA Semantics**: `role="tablist"`, `role="tab"`, and `role="tabpanel"` are applied automatically.
-4. **PDF Export**: Each tab appears on its own PDF page automatically, with per-slide opt-out.
-5. **Multiple Tabsets**: Support for multiple tabsets per slide.
-6. **Nested Fragments**: Fragments within tabs are properly indexed.
+2. **ARIA Semantics**: `role="tablist"`, `role="tab"`, and `role="tabpanel"` are applied automatically.
+3. **PDF Export**: Each tab appears on its own PDF page automatically, with per-slide opt-out.
+4. **Multiple Tabsets**: Support for multiple tabsets per slide.
+5. **Nested Fragments**: Fragments within tabs are properly indexed.
 
 ## Usage Tips
 

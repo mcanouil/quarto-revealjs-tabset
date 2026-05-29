@@ -5,7 +5,6 @@
 ### New Features
 
 - feat: Add ARIA roles (`tablist`, `tab`, `tabpanel`) and a `presentation` role on tab list items at initialisation, so assistive technology recognises the tabset structure.
-- feat: Wire keyboard navigation within each tablist (Left/Right move between tabs, Home/End jump to first/last); focus follows the active tab.
 - feat: Honour `data-tab-active="N"` on a `.panel-tabset` to set the initial active tab (zero-based, out-of-range values fall back to `0`).
 - feat: Honour `data-tabset-skip-pdf-clone` on a slide `<section>` to opt that slide out of per-tab PDF cloning; the first tab renders as a single PDF page.
 
