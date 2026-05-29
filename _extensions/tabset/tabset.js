@@ -184,9 +184,7 @@ window.RevealJsTabset = function () {
         const tabIndex = parseIndex(event.fragment.dataset.tabIndex, tabLinks.length, -1);
         if (tabIndex < 0) return;
 
-        if (tabLinks[tabIndex]) {
-          tabLinks[tabIndex].click();
-        }
+        tabLinks[tabIndex].click();
       });
 
       /**
@@ -204,9 +202,7 @@ window.RevealJsTabset = function () {
         if (tabIndex < 0) return;
 
         const targetIndex = tabIndex > 0 ? tabIndex - 1 : 0;
-        if (tabLinks[targetIndex]) {
-          tabLinks[targetIndex].click();
-        }
+        tabLinks[targetIndex].click();
       });
 
       /**
