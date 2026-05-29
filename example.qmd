@@ -21,6 +21,7 @@ This extension brings proper tabset support to Reveal.js presentations.
 
 - Navigate through tabs using arrow keys or space bar.
 - Tabs are treated as fragments.
+- ARIA roles and keyboard navigation are wired automatically.
 - PDF export support.
 
 ## How it works
@@ -53,7 +54,7 @@ No additional configuration is needed.
 
 ## Simple Tabset
 
-:::: {.panel-tabset}
+::: {.panel-tabset}
 
 ### Tab 1
 
@@ -83,17 +84,17 @@ This is the content of the third tab.
 
 ## Tabset with Fragments
 
-:::: {.panel-tabset}
+::: {.panel-tabset}
 
 ### Introduction
 
 This tab contains fragments.
 
-:::: {.fragment}
+::: {.fragment}
 First fragment appears.
 :::
 
-:::: {.fragment}
+::: {.fragment}
 Second fragment appears.
 :::
 
@@ -111,14 +112,52 @@ Summary of the topic.
 
 :::
 
+## Initial Active Tab via `tab-active`
+
+The second tab opens first thanks to `tab-active="1"`; Pandoc emits it as `data-tab-active="1"`.
+
+::: {.panel-tabset tab-active="1"}
+
+### First
+
+You would expect this tab to be active by default; it is not.
+
+### Second
+
+This tab is active first; the index is zero-based.
+
+### Third
+
+A third tab to round out the example.
+
+:::
+
+## Skip PDF Cloning Per Slide {tabset-skip-pdf-clone="true"}
+
+This slide carries `data-tabset-skip-pdf-clone`, so its PDF export keeps a single page showing only the first tab.
+
+::: {.panel-tabset}
+
+### Visible in PDF
+
+This tab is exported.
+
+### Hidden in PDF
+
+This tab is hidden during PDF export for this slide only.
+
+:::
+
 # Features
 
 ## Key Features
 
 1. **Fragment Navigation**: Tabs are treated as fragments, allowing smooth navigation.
-2. **PDF Export**: Each tab appears on its own PDF page automatically.
-3. **Multiple Tabsets**: Support for multiple tabsets per slide.
-4. **Nested Fragments**: Fragments within tabs are properly indexed.
+2. **Keyboard Accessibility**: Left/Right/Home/End keys move between tabs inside a tablist.
+3. **ARIA Semantics**: `role="tablist"`, `role="tab"`, and `role="tabpanel"` are applied automatically.
+4. **PDF Export**: Each tab appears on its own PDF page automatically, with per-slide opt-out.
+5. **Multiple Tabsets**: Support for multiple tabsets per slide.
+6. **Nested Fragments**: Fragments within tabs are properly indexed.
 
 ## Usage Tips
 

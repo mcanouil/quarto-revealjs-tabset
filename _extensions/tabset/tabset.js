@@ -10,13 +10,16 @@ window.RevealJsTabset = function () {
   return {
     id: "RevealJsTabset",
     init: function (deck) {
+      const TABLIST_SELECTOR = "ul.panel-tabset-tabby";
       const TAB_SELECTOR = "ul.panel-tabset-tabby > li";
       const TAB_LINK_SELECTOR = "ul.panel-tabset-tabby > li a";
+      const SKIP_PDF_CLONE_ATTR = "data-tabset-skip-pdf-clone";
+      const INITIAL_TAB_ATTR = "data-tab-active";
 
       /**
        * Get all tab panes for a given tabset element.
-       * @param {Element} tabset - The tabset container element
-       * @returns {HTMLCollection} Collection of tab pane elements
+       * @param {Element} tabset The tabset container element.
+       * @returns {HTMLCollection} Collection of tab pane elements.
        */
       function getTabPanes(tabset) {
         const tabContent = tabset.querySelector(".tab-content");
@@ -24,9 +27,86 @@ window.RevealJsTabset = function () {
       }
 
       /**
+       * Parse a non-negative integer attribute value, returning a fallback when the value
+       * is missing, empty, or out of range.
+       * @param {string|null|undefined} value The raw attribute value.
+       * @param {number} max Exclusive upper bound (typically tab count).
+       * @param {number} fallback Value to return when parsing fails or is out of range.
+       * @returns {number} A safe integer index within [0, max).
+       */
+      function parseIndex(value, max, fallback) {
+        if (value === null || value === undefined || value === "") return fallback;
+        const parsed = parseInt(value, 10);
+        if (isNaN(parsed) || parsed < 0 || parsed >= max) return fallback;
+        return parsed;
+      }
+
+      /**
+       * Apply ARIA roles to a tabset so assistive technology recognises the structure.
+       * @param {Element} tabset The tabset container element.
+       */
+      function applyAriaRoles(tabset) {
+        const tablist = tabset.querySelector(TABLIST_SELECTOR);
+        if (tablist) {
+          tablist.setAttribute("role", "tablist");
+          const tabItems = tablist.querySelectorAll(":scope > li");
+          tabItems.forEach(function (li) {
+            li.setAttribute("role", "presentation");
+            const link = li.querySelector("a");
+            if (link) {
+              link.setAttribute("role", "tab");
+              if (!link.hasAttribute("aria-selected")) {
+                link.setAttribute("aria-selected", "false");
+              }
+            }
+          });
+        }
+        const tabPanes = getTabPanes(tabset);
+        Array.from(tabPanes).forEach(function (pane) {
+          pane.setAttribute("role", "tabpanel");
+          pane.setAttribute("tabindex", "0");
+        });
+      }
+
+      /**
+       * Wire keyboard navigation (Left/Right/Home/End) within a tablist.
+       * @param {Element} tabset The tabset container element.
+       */
+      function wireKeyboardNavigation(tabset) {
+        const tabLinks = tabset.querySelectorAll(TAB_LINK_SELECTOR);
+        if (tabLinks.length <= 1) return;
+
+        tabLinks.forEach(function (link, index) {
+          link.addEventListener("keydown", function (event) {
+            let targetIndex = null;
+            switch (event.key) {
+              case "ArrowRight":
+                targetIndex = (index + 1) % tabLinks.length;
+                break;
+              case "ArrowLeft":
+                targetIndex = (index - 1 + tabLinks.length) % tabLinks.length;
+                break;
+              case "Home":
+                targetIndex = 0;
+                break;
+              case "End":
+                targetIndex = tabLinks.length - 1;
+                break;
+              default:
+                return;
+            }
+            event.preventDefault();
+            tabLinks[targetIndex].click();
+            tabLinks[targetIndex].focus();
+          });
+        });
+      }
+
+      /**
        * Initialise tabset fragments on ready.
-       * This sets up fragment indices for tab content and creates invisible
-       * fragment triggers for tab navigation.
+       * Adds ARIA roles, wires keyboard navigation, optionally activates a non-zero
+       * initial tab via `data-tab-active`, then sets up fragment indices for tab
+       * content and creates invisible fragment triggers for tab navigation.
        */
       deck.on("ready", function () {
         const tabsetSlides = document.querySelectorAll(
@@ -36,16 +116,39 @@ window.RevealJsTabset = function () {
         tabsetSlides.forEach(function (tabset) {
           const tabs = tabset.querySelectorAll(TAB_SELECTOR);
           const tabCount = tabs.length;
-          if (tabCount <= 1) return;
+
+          if (tabCount === 0) {
+            console.warn(
+              "RevealJsTabset: encountered an empty .panel-tabset; skipping.",
+              tabset,
+            );
+            return;
+          }
+
+          applyAriaRoles(tabset);
+
+          if (tabCount === 1) return;
+
+          wireKeyboardNavigation(tabset);
+
+          const initialTabIndex = parseIndex(
+            tabset.getAttribute(INITIAL_TAB_ATTR),
+            tabCount,
+            0,
+          );
+          if (initialTabIndex > 0) {
+            const tabLinks = tabset.querySelectorAll(TAB_LINK_SELECTOR);
+            if (tabLinks[initialTabIndex]) {
+              tabLinks[initialTabIndex].click();
+            }
+          }
 
           const tabPanes = getTabPanes(tabset);
           const parentNode = tabset.parentNode;
           let currentIndex = 0;
 
-          // Process each tab
           for (let i = 0; i < tabCount; i++) {
             if (tabPanes[i]) {
-              // Assign fragment indices to any fragments within the tab pane
               const fragmentsInPane = tabPanes[i].querySelectorAll(".fragment");
               fragmentsInPane.forEach(function (fragment) {
                 fragment.setAttribute("data-fragment-index", currentIndex);
@@ -53,7 +156,6 @@ window.RevealJsTabset = function () {
               });
             }
 
-            // Create invisible fragment triggers for tab switching (except after last tab)
             if (i < tabCount - 1) {
               const fragmentDiv = document.createElement("div");
               fragmentDiv.className = "panel-tabset-fragment fragment";
@@ -75,12 +177,13 @@ window.RevealJsTabset = function () {
       deck.on("fragmentshown", function (event) {
         if (!event.fragment.classList.contains("panel-tabset-fragment")) return;
 
-        const tabIndex = parseInt(event.fragment.dataset.tabIndex, 10);
-        if (isNaN(tabIndex)) return;
         const tabset = deck.getCurrentSlide().querySelector(".panel-tabset");
         if (!tabset) return;
 
         const tabLinks = tabset.querySelectorAll(TAB_LINK_SELECTOR);
+        const tabIndex = parseIndex(event.fragment.dataset.tabIndex, tabLinks.length, -1);
+        if (tabIndex < 0) return;
+
         if (tabLinks[tabIndex]) {
           tabLinks[tabIndex].click();
         }
@@ -93,12 +196,13 @@ window.RevealJsTabset = function () {
       deck.on("fragmenthidden", function (event) {
         if (!event.fragment.classList.contains("panel-tabset-fragment")) return;
 
-        const tabIndex = parseInt(event.fragment.dataset.tabIndex, 10);
-        if (isNaN(tabIndex)) return;
         const tabset = deck.getCurrentSlide().querySelector(".panel-tabset");
         if (!tabset) return;
 
         const tabLinks = tabset.querySelectorAll(TAB_LINK_SELECTOR);
+        const tabIndex = parseIndex(event.fragment.dataset.tabIndex, tabLinks.length, -1);
+        if (tabIndex < 0) return;
+
         const targetIndex = tabIndex > 0 ? tabIndex - 1 : 0;
         if (tabLinks[targetIndex]) {
           tabLinks[targetIndex].click();
@@ -107,8 +211,8 @@ window.RevealJsTabset = function () {
 
       /**
        * Update tab link and pane states for a given active tab index.
-       * @param {Element} tabset - The tabset container element
-       * @param {number} activeTabIndex - The index of the tab to activate
+       * @param {Element} tabset The tabset container element.
+       * @param {number} activeTabIndex The index of the tab to activate.
        */
       function updateTabState(tabset, activeTabIndex) {
         if (!tabset) return;
@@ -138,29 +242,50 @@ window.RevealJsTabset = function () {
       }
 
       /**
+       * Strip element IDs from a cloned subtree so that duplicates do not appear in
+       * the live document.
+       * Tabby and Reveal selectors that depend on a unique id break otherwise.
+       * Print/PDF output only needs visual fidelity, so removing the id is safe.
+       * @param {Element} root The cloned subtree root.
+       */
+      function stripIds(root) {
+        if (root.id) root.removeAttribute("id");
+        const ided = root.querySelectorAll("[id]");
+        ided.forEach(function (element) {
+          element.removeAttribute("id");
+        });
+      }
+
+      /**
        * Handle PDF export mode.
-       * When pdfSeparateFragments is enabled, updates tab visibility based
-       * on fragment state (existing behaviour).
-       * Otherwise, clones slides for each tab so every tab appears on its
-       * own PDF page without affecting other fragments in the deck.
+       * When `pdfSeparateFragments` is enabled, update tab visibility based on the
+       * visible fragments (existing behaviour).
+       * Otherwise, clone each tabset slide so every tab appears on its own PDF
+       * page without affecting other fragments in the deck.
+       * Slides carrying `data-tabset-skip-pdf-clone` opt out of cloning.
        */
       deck.on("pdf-ready", function () {
         const config = deck.getConfig();
+        const separateFragments = config.pdfSeparateFragments !== false;
         const slides = document.querySelectorAll(".reveal .slides section");
 
-        if (config.pdfSeparateFragments) {
-          // Existing behaviour: determine active tab from visible fragments
+        if (separateFragments) {
           slides.forEach(function (slide) {
             const tabset = slide.querySelector(".panel-tabset");
             if (!tabset) return;
 
             const fragments = slide.querySelectorAll(".panel-tabset-fragment");
+            const tabLinks = tabset.querySelectorAll(TAB_LINK_SELECTOR);
             let activeTabIndex = 0;
 
             fragments.forEach(function (fragment) {
               if (fragment.classList.contains("visible")) {
-                const tabIndex = parseInt(fragment.dataset.tabIndex, 10);
-                if (!isNaN(tabIndex) && tabIndex > activeTabIndex) {
+                const tabIndex = parseIndex(
+                  fragment.dataset.tabIndex,
+                  tabLinks.length,
+                  -1,
+                );
+                if (tabIndex > activeTabIndex) {
                   activeTabIndex = tabIndex;
                 }
               }
@@ -168,35 +293,39 @@ window.RevealJsTabset = function () {
 
             updateTabState(tabset, activeTabIndex);
           });
-        } else {
-          // Clone slides so each tab gets its own PDF page
-          slides.forEach(function (slide) {
-            const tabset = slide.querySelector(".panel-tabset");
-            if (!tabset) return;
-
-            const tabLinks = tabset.querySelectorAll(TAB_LINK_SELECTOR);
-            const tabCount = tabLinks.length;
-            if (tabCount <= 1) return;
-
-            const pageElement = slide.closest(".pdf-page") || slide;
-
-            // Show tab 0 on the original slide
-            updateTabState(tabset, 0);
-
-            // Clone for each remaining tab
-            let insertAfter = pageElement;
-            for (let i = 1; i < tabCount; i++) {
-              const clone = pageElement.cloneNode(true);
-              const cloneTabset = clone.querySelector(".panel-tabset");
-              updateTabState(cloneTabset, i);
-              insertAfter.parentNode.insertBefore(
-                clone,
-                insertAfter.nextSibling,
-              );
-              insertAfter = clone;
-            }
-          });
+          return;
         }
+
+        slides.forEach(function (slide) {
+          const tabset = slide.querySelector(".panel-tabset");
+          if (!tabset) return;
+
+          if (slide.hasAttribute(SKIP_PDF_CLONE_ATTR)) {
+            updateTabState(tabset, 0);
+            return;
+          }
+
+          const tabLinks = tabset.querySelectorAll(TAB_LINK_SELECTOR);
+          const tabCount = tabLinks.length;
+          if (tabCount <= 1) return;
+
+          const pageElement = slide.closest(".pdf-page") || slide;
+
+          updateTabState(tabset, 0);
+
+          let insertAfter = pageElement;
+          for (let i = 1; i < tabCount; i++) {
+            const clone = pageElement.cloneNode(true);
+            stripIds(clone);
+            const cloneTabset = clone.querySelector(".panel-tabset");
+            updateTabState(cloneTabset, i);
+            insertAfter.parentNode.insertBefore(
+              clone,
+              insertAfter.nextSibling,
+            );
+            insertAfter = clone;
+          }
+        });
       });
     },
   };

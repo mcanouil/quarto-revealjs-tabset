@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+### New Features
+
+- feat: Add ARIA roles (`tablist`, `tab`, `tabpanel`) and a `presentation` role on tab list items at initialisation, so assistive technology recognises the tabset structure.
+- feat: Wire keyboard navigation within each tablist (Left/Right move between tabs, Home/End jump to first/last); focus follows the active tab.
+- feat: Honour `data-tab-active="N"` on a `.panel-tabset` to set the initial active tab (zero-based, out-of-range values fall back to `0`).
+- feat: Honour `data-tabset-skip-pdf-clone` on a slide `<section>` to opt that slide out of per-tab PDF cloning; the first tab renders as a single PDF page.
+
+### Bug Fixes
+
+- fix: Strip element `id` attributes from cloned slides during PDF export so nested tabsets and other ID-bearing elements do not produce duplicate IDs in the document.
+- fix: Use an explicit default for `config.pdfSeparateFragments` (`!== false`) so the cloning path runs only when Reveal.js or the document has explicitly disabled fragment splitting.
+- fix: Validate `data-tab-index` values against the tab count before clicking, so a stray index cannot click a missing element.
+- fix: Warn and skip when a `.panel-tabset` contains zero tabs instead of failing silently downstream.
+
 ## 1.3.0 (2026-04-06)
 
 ### New Features
