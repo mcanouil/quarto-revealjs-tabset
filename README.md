@@ -5,7 +5,7 @@ A Reveal.js plugin that brings proper tabset support to Quarto presentations: ea
 ## Installation
 
 ```bash
-quarto add mcanouil/quarto-revealjs-tabset@1.4.0
+quarto add mcanouil/quarto-revealjs-tabset@1.4.1
 ```
 
 This will install the extension under the `_extensions` subdirectory.
