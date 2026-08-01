@@ -6,6 +6,7 @@ description: "Tabsets on slides, with the source for each and what the preview d
 
 The [preview deck](preview.html) is built by this site.
 This page is the source behind it.
+A tab arriving on an arrow press is not something a page of prose can show, so open the deck alongside this one.
 
 ## A tabset
 
@@ -28,7 +29,7 @@ Each tab is a fragment, so the arrow keys step through them without leaving the 
 ## Opening on a given tab
 
 ```markdown
-::: {.panel-tabset tab-active="2"}
+::: {.panel-tabset tab-active="1"}
 
 ### One
 
@@ -37,7 +38,8 @@ Each tab is a fragment, so the arrow keys step through them without leaving the 
 :::
 ```
 
-The slide arrives with the second tab open.
+The index counts from zero, so `1` is the second tab and the slide arrives with `Two` open.
+An index the tabset does not have falls back to the first tab.
 The attribute is emitted as `data-tab-active` in the HTML.
 
 ## Fragments inside a tab
@@ -47,8 +49,8 @@ The attribute is emitted as `data-tab-active` in the HTML.
 
 ### With reveals
 
-- []{.fragment} First point.
-- []{.fragment} Second point.
+- [First point.]{.fragment}
+- [Second point.]{.fragment}
 
 ### Plain
 
@@ -78,6 +80,7 @@ Fragments inside a tab are indexed within it, so the points arrive before the ne
 ```
 
 They are navigated one after another rather than in parallel.
+A PDF export reads the first tabset only, so the second one prints on its first tab.
 
 ## Printing
 
@@ -89,7 +92,8 @@ Opt a slide out where that is not wanted:
 ## A slide {tabset-skip-pdf-clone="true"}
 ```
 
-Its tabsets then stay on one page, showing the active tab alone.
+Its tabset then stays on one page, showing the first tab alone.
+The attribute has no effect under `pdf-separate-fragments: true`, which gives every fragment its own page anyway.
 
 ## Source
 

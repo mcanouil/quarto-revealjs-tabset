@@ -19,10 +19,13 @@ Tabsets are written exactly as they are anywhere in Quarto.
 
 | Attribute | Written on | Description |
 | --- | --- | --- |
-| `tab-active` | A tabset | Which tab is open when the slide arrives, counting from one. Emitted as `data-tab-active`. |
-| `tabset-skip-pdf-clone` | A slide | Keep this slide's tabsets on one PDF page rather than one page per tab. |
+| `tab-active` | A tabset | Which tab is open when the slide arrives, counting from zero, so `1` is the second tab. Emitted as `data-tab-active`. |
+| `tabset-skip-pdf-clone` | A slide | Keep this slide's tabset on one PDF page rather than one page per tab. |
 
 : The two attributes. {.striped .hover tbl-colwidths="[24,18,58]"}
+
+A `tab-active` that is not a whole number, or that names a tab the tabset does not have, falls back to the first tab.
+A tabset with one tab keeps the ARIA roles and is otherwise left alone, and an empty one writes a console warning.
 
 ## Fragment navigation
 
@@ -44,9 +47,13 @@ Those roles are set at run time, not written into the file, so they will not be 
 
 Each tab is placed on its own page, so a printed deck shows every tab rather than the first.
 
-Opt a slide out with `tabset-skip-pdf-clone`, which keeps its tabsets on a single page.
+Opt a slide out with `tabset-skip-pdf-clone`, which keeps its tabset on a single page showing the first tab.
+
+Setting Quarto's `pdf-separate-fragments: true` takes the deck down a different path, where every fragment already gets its own page and the plugin only keeps the tab state in step with it.
+`tabset-skip-pdf-clone` does nothing there.
 
 ## Limitations
 
 - RevealJS only.
 - The navigation and the roles need JavaScript; without it, Quarto's own tabset behaviour remains.
+- PDF cloning reads the first tabset on a slide. A second tabset on the same slide is navigated normally in the browser, but a printed page shows it on its first tab.

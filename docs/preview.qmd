@@ -1,6 +1,7 @@
 ---
 title: "Tabset in a deck"
 subtitle: "Tabs as fragments"
+description: "A RevealJS deck with the tabset plugin enabled, so the tabs can be stepped through with the arrow keys."
 format:
   revealjs:
     theme: default
@@ -31,7 +32,7 @@ And the third.
 
 ## Opening on a given tab
 
-`tab-active` selects which tab is open when the slide arrives.
+`tab-active` selects which tab is open when the slide arrives, counting from zero.
 
 ::: {.panel-tabset tab-active="2"}
 
@@ -41,9 +42,11 @@ Not this one.
 
 ### Two
 
-This one, because `tab-active="2"`.
+Nor this one.
 
 ### Three
+
+This one, because `tab-active="2"` counts from zero.
 
 :::
 
