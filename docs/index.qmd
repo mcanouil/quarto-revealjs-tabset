@@ -1,0 +1,73 @@
+---
+title: "RevealJS Tabset"
+subtitle: "Quarto tabsets that work on slides."
+description: "What the tabset plugin adds to a RevealJS presentation, how to enable it, and how tabs become fragments."
+authors:
+  - name: "Mickaël CANOUIL, _Ph.D._"
+    orcid: "0000-0002-3396-4549"
+    url: "https://mickael.canouil.fr"
+---
+
+Quarto's `.panel-tabset` is a good way to put three versions of the same thing on one page.
+On a slide it is awkward: the tabs are there, and stepping through a talk with the arrow keys does not reach them, so the speaker has to leave the keyboard and click.
+
+`tabset` makes each tab a fragment.
+Arrow keys move through them like anything else on the slide, the ARIA roles are set for assistive technology, and a PDF export puts each tab on its own page.
+
+## Installation
+
+```bash
+quarto add {{< var extension.reference >}}
+```
+
+This will install the extension under the `_extensions` subdirectory.
+If you are using version control, you will want to check in this directory.
+
+Or install it from your editor with [Quarto Wizard](https://m.canouil.dev/quarto-wizard):
+
+::: {.btn-group role="group" aria-label="Quarto Wizard installer options"}
+
+[Visual Studio Code](vscode://mcanouil.quarto-wizard/install?repo={{< var extension.wizard-reference >}}){.btn .btn-outline-primary title="Install {{< var extension.reference >}} in Visual Studio Code using the Quarto Wizard extension."}
+[Positron](positron://mcanouil.quarto-wizard/install?repo={{< var extension.wizard-reference >}}){.btn .btn-outline-primary title="Install {{< var extension.reference >}} in Positron using the Quarto Wizard extension."}
+[VSCodium](vscodium://mcanouil.quarto-wizard/install?repo={{< var extension.wizard-reference >}}){.btn .btn-outline-primary title="Install {{< var extension.reference >}} in VSCodium using the Quarto Wizard extension."}
+
+:::
+
+## Quick start
+
+```yaml
+format:
+  revealjs: default
+revealjs-plugins:
+  - tabset
+```
+
+Then write tabsets as you would anywhere in Quarto:
+
+```markdown
+::: {.panel-tabset}
+
+### First
+
+### Second
+
+:::
+```
+
+## Try it
+
+The [preview deck](preview.html) is built by this site: press the arrow keys and the tabs arrive in turn.
+
+See the [Reference](reference.qmd) for every attribute, and the [Examples](examples.qmd) for the source behind the deck.
+
+## Where it works
+
+RevealJS.
+
+## Links
+
+- [Reference](reference.qmd) for the attributes and the PDF behaviour.
+- [Examples](examples.qmd) for the source behind the deck.
+- [Preview deck](preview.html) to step through.
+- [Changelog](changelog.qmd) for what each release changed.
+- [Source and issues](https://github.com/mcanouil/quarto-revealjs-tabset) on GitHub.

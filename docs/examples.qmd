@@ -1,0 +1,96 @@
+---
+title: "Examples"
+subtitle: "The source behind the deck."
+description: "Tabsets on slides, with the source for each and what the preview deck does with it."
+---
+
+The [preview deck](preview.html) is built by this site.
+This page is the source behind it.
+
+## A tabset
+
+```markdown
+::: {.panel-tabset}
+
+### First
+
+The first tab.
+
+### Second
+
+The second, reached with the next arrow press.
+
+:::
+```
+
+Each tab is a fragment, so the arrow keys step through them without leaving the keyboard.
+
+## Opening on a given tab
+
+```markdown
+::: {.panel-tabset tab-active="2"}
+
+### One
+
+### Two
+
+:::
+```
+
+The slide arrives with the second tab open.
+The attribute is emitted as `data-tab-active` in the HTML.
+
+## Fragments inside a tab
+
+```markdown
+::: {.panel-tabset}
+
+### With reveals
+
+- []{.fragment} First point.
+- []{.fragment} Second point.
+
+### Plain
+
+:::
+```
+
+Fragments inside a tab are indexed within it, so the points arrive before the next tab does.
+
+## Several tabsets on one slide
+
+```markdown
+::: {.panel-tabset}
+
+### A
+
+### B
+
+:::
+
+::: {.panel-tabset}
+
+### X
+
+### Y
+
+:::
+```
+
+They are navigated one after another rather than in parallel.
+
+## Printing
+
+Each tab is placed on its own page in a PDF export, so a printed deck shows all of them.
+
+Opt a slide out where that is not wanted:
+
+```markdown
+## A slide {tabset-skip-pdf-clone="true"}
+```
+
+Its tabsets then stay on one page, showing the active tab alone.
+
+## Source
+
+The repository ships a short, standalone starting point you can copy: [`example.qmd`](https://github.com/mcanouil/quarto-revealjs-tabset/blob/main/example.qmd).
