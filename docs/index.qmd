@@ -58,6 +58,8 @@ Then write tabsets as you would anywhere in Quarto:
 
 The [preview deck](preview.html) is built by this site: press the arrow keys and the tabs arrive in turn.
 
+![](preview.html){.embed-art loading="lazy" title="A deck with tabsets as fragments" style="--atelier-embed-art-ratio: 1.78;"}
+
 See the [Reference](reference.qmd) for every attribute, and the [Examples](examples.qmd) for the source behind the deck.
 
 ## Where it works
