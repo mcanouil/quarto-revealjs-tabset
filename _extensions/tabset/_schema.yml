@@ -1,21 +1,24 @@
 # _schema.yml for "tabset" revealjs-plugin extension
 # Documents the per-slide and per-tabset attributes the plugin recognises.
 
-$schema: https://m.canouil.dev/quarto-wizard/assets/schema/v1/extension-schema.json
+$schema: https://m.canouil.dev/quarto-wizard/assets/schema/v2/extension-schema.json
 
 options: {}
 
 attributes:
-  data-tab-active:
-    type: integer
-    description: >
-      Zero-based index of the tab to activate when the tabset first appears.
-      Set on the `.panel-tabset` element.
-      Out-of-range or non-integer values fall back to `0`.
-    default: 0
-  data-tabset-skip-pdf-clone:
-    type: boolean
-    description: >
-      Set on a slide `<section>` to opt out of per-tab PDF cloning.
-      The first tab is shown and remaining tabs are hidden on that slide only.
-      Has no effect when `pdf-separate-fragments: true` is set globally.
+  panel-tabset:
+    tab-active:
+      type: integer
+      description: >
+        Zero-based index of the tab to activate when the tabset first appears.
+        Emitted as `data-tab-active`.
+        Out-of-range or non-integer values fall back to `0`.
+      default: 0
+  _any:
+    tabset-skip-pdf-clone:
+      type: boolean
+      description: >
+        Set on a slide to opt out of per-tab PDF cloning.
+        Emitted as `data-tabset-skip-pdf-clone`.
+        The first tab is shown and remaining tabs are hidden on that slide only.
+        Has no effect when `pdf-separate-fragments: true` is set globally.
