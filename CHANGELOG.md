@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Bug Fixes
+
+- fix: Describe `tab-active` and `tabset-skip-pdf-clone` in `_schema.yml` under their authored names and the elements they are written on, rather than under the `data-` prefixed names Pandoc emits, so editors no longer suggest attributes that render as `data-data-tab-active`. Target the Quarto Wizard v2 extension schema.
+
 ## 1.4.1 (2026-08-01)
 
 ### Documentation
