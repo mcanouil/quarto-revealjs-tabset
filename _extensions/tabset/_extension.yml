@@ -1,6 +1,6 @@
 title: Reveal.js Tabset
 author: Mickaël Canouil
-version: 1.4.2
+version: 1.4.3
 quarto-required: ">=1.8.26"
 contributes:
   revealjs-plugins:
