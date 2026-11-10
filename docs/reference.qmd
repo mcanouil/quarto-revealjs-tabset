@@ -56,10 +56,7 @@ The invisible element that carries a tab's step is hidden from assistive technol
 
 ## PDF export
 
-Under Quarto's default, `pdf-separate-fragments: true`, a stepped tabset has one page per step.
-Each page shows the tab of its step, and the page numbers are those of Reveal.js.
-
-With `pdf-separate-fragments: false`, the slide is copied once per tab state, following the same steps as the browser.
+With Quarto's default, `pdf-separate-fragments: false`, the slide is copied once per tab state, following the same steps as the browser.
 Nested tabsets and several tabsets on one slide get one page for each tab state they can show, not one page for each tab of the largest tabset.
 The copies are numbered `N.1`, `N.2` and so on.
 Their `id` values get the suffix `-print-k`, and the links, `aria-controls`, `aria-labelledby`, `aria-describedby`, `for` and `headers` values that point to them follow, so the document has no duplicate `id` outside SVG.
@@ -67,9 +64,12 @@ Ids inside an SVG keep their values.
 Scroll positions inside the slide are copied to each page.
 Every tab is kept, whatever `pdf-max-pages-per-slide` says.
 
+With `pdf-separate-fragments: true`, a stepped tabset has one page per step.
+Each page shows the tab of its step, and the page numbers are those of Reveal.js.
+
 Opt a slide out with `tabset-skip-pdf-clone`, which keeps its tabset on a single page showing the first tab.
 It does nothing when `pdf-separate-fragments` is `true`.
-A tabset marked `.no-tabset-fragments` also prints on one page showing the first tab.
+A tabset marked `.no-tabset-fragments` also prints on one page, showing the tab it shows on screen, which is the `tab-active` tab when one is set.
 
 ## Quarto's tabset-fragments option
 

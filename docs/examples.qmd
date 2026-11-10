@@ -25,7 +25,7 @@ The second, reached with the next arrow press.
 ```
 
 The arrow keys step through the tabs without leaving the keyboard.
-The first press shows the first tab, and each later press brings the next tab.
+The first tab is open when the slide arrives, and each press brings the next fragment or the next tab.
 
 ## Opening on a given tab
 
@@ -98,12 +98,12 @@ In a PDF export each tabset shows the tab of its own step on every page.
 :::
 ```
 
-The tabset is then left to Quarto: the tabs are clicked, the arrow keys skip it, and a PDF export prints it on one page showing the first tab.
+The tabset is then left to Quarto: the tabs are clicked, the arrow keys skip it, and a PDF export prints it on one page, showing the tab it shows on screen.
 
 ## Printing
 
-Under Quarto's default, `pdf-separate-fragments: true`, a PDF export has one page per step, and each page shows the tab of its step.
-With `pdf-separate-fragments: false`, each tab is placed on its own page, and the page numbers read `N.1`, `N.2` and so on.
+With Quarto's default, `pdf-separate-fragments: false`, each tab state is placed on its own page, and the page numbers read `N.1`, `N.2` and so on.
+With `pdf-separate-fragments: true`, a PDF export has one page per step, and each page shows the tab of its step.
 
 Opt a slide out where that is not wanted:
 
