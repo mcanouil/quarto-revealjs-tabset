@@ -115,6 +115,15 @@ window.RevealJsTabset = function () {
 
   function expandTabset(tabset) {
     const groups = [];
+    if (tabset.classList.contains("fragment")) {
+      groups.push([tabset]);
+      tabset
+        .querySelectorAll(":scope > .tab-content")
+        .forEach(function (content) {
+          content.classList.remove("fragment");
+          content.removeAttribute("data-fragment-index");
+        });
+    }
     panes(tabset).forEach(function (pane, k) {
       if (k > 0) {
         groups.push([makeTrigger(tabset, k)]);
@@ -156,7 +165,14 @@ window.RevealJsTabset = function () {
   function clickKeepingFocus(tabset, link) {
     const focused = document.activeElement;
     const focusOnTabs = tabLinks(tabset).includes(focused);
-    link.click();
+    link.focus = function () {
+      HTMLElement.prototype.focus.call(link, { preventScroll: true });
+    };
+    try {
+      link.click();
+    } finally {
+      delete link.focus;
+    }
     if (!focusOnTabs) {
       if (focused && focused !== document.body) {
         focused.focus({ preventScroll: true });
@@ -166,7 +182,7 @@ window.RevealJsTabset = function () {
     }
   }
 
-  function syncTabs(slide, allShown) {
+  function syncTabs(slide) {
     if (!slide) {
       return;
     }
@@ -174,7 +190,7 @@ window.RevealJsTabset = function () {
       if (!tabset.querySelector(":scope > ." + kTrigger)) {
         return;
       }
-      const link = tabLinks(tabset)[visibleStep(tabset, allShown)];
+      const link = tabLinks(tabset)[visibleStep(tabset)];
       if (link && link.getAttribute("aria-selected") !== "true") {
         clickKeepingFocus(tabset, link);
       }
@@ -198,10 +214,10 @@ window.RevealJsTabset = function () {
     });
   }
 
-  function visibleStep(tabset, allShown) {
+  function visibleStep(tabset) {
     let k = 0;
     tabset
-      .querySelectorAll(":scope > ." + kTrigger + (allShown ? "" : ".visible"))
+      .querySelectorAll(":scope > ." + kTrigger + ".visible")
       .forEach(function (trigger) {
         k = Math.max(k, parseInt(trigger.getAttribute("data-tabset-step"), 10));
       });
@@ -406,7 +422,6 @@ window.RevealJsTabset = function () {
         if (deck.isPrintView()) {
           return;
         }
-        const allShown = deck.isScrollView();
         deck
           .getSlides()
           .filter(function (slide) {
@@ -416,7 +431,7 @@ window.RevealJsTabset = function () {
             );
           })
           .forEach(function (slide) {
-            syncTabs(slide, allShown);
+            syncTabs(slide);
           });
       };
       deck.on("pdf-ready", function () {
