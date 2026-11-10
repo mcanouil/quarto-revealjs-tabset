@@ -13,7 +13,7 @@ window.RevealJsTabset = function () {
   const kSkipPdfClone = "data-tabset-skip-pdf-clone";
   const kInitialTab = "data-tab-active";
 
-  let warned = false;
+  const warned = new WeakSet();
 
   function tabLinks(tabset) {
     return Array.from(
@@ -42,10 +42,12 @@ window.RevealJsTabset = function () {
     }
     const outer = parentTabset(tabset);
     if (outer && !isFragmented(outer)) {
-      if (tabset.classList.contains(kClassOn) && !warned) {
-        warned = true;
+      if (tabset.classList.contains(kClassOn) && !warned.has(tabset)) {
+        warned.add(tabset);
         console.warn(
-          "RevealJsTabset: the class '.tabset-fragments' on a tabset inside a tabset that is not fragmented is ignored."
+          "RevealJsTabset: the class '.tabset-fragments' on the tabset \"" +
+            tabLinks(tabset)[0].textContent.trim() +
+            "\" inside a tabset that is not fragmented is ignored."
         );
       }
       return false;
@@ -151,13 +153,13 @@ window.RevealJsTabset = function () {
     );
   }
 
-  function syncTabs(slide) {
+  function syncTabs(slide, allShown) {
     if (!slide) {
       return;
     }
     slide.querySelectorAll(".panel-tabset").forEach(function (tabset) {
       const triggers = tabset.querySelectorAll(
-        ":scope > ." + kTrigger + ".visible"
+        ":scope > ." + kTrigger + (allShown ? "" : ".visible")
       );
       if (triggers.length === 0 && !tabset.querySelector(":scope > ." + kTrigger)) {
         return;
@@ -168,7 +170,16 @@ window.RevealJsTabset = function () {
       });
       const link = tabLinks(tabset)[k];
       if (link && link.getAttribute("aria-selected") !== "true") {
+        const focused = document.activeElement;
+        const focusOnTabs = tabLinks(tabset).includes(focused);
         link.click();
+        if (!focusOnTabs) {
+          if (focused && focused !== document.body) {
+            focused.focus({ preventScroll: true });
+          } else {
+            link.blur();
+          }
+        }
       }
     });
   }
@@ -215,6 +226,72 @@ window.RevealJsTabset = function () {
     }
   }
 
+  function suffixIds(root, suffix) {
+    const ids = new Set(
+      Array.from(root.querySelectorAll("[id]")).map(function (el) {
+        return el.id;
+      })
+    );
+    const renamed = function (token) {
+      return ids.has(token) ? token + suffix : token;
+    };
+    root.querySelectorAll("[href^='#']").forEach(function (el) {
+      el.setAttribute("href", "#" + renamed(el.getAttribute("href").slice(1)));
+    });
+    ["aria-controls", "aria-labelledby", "for"].forEach(function (name) {
+      root.querySelectorAll("[" + name + "]").forEach(function (el) {
+        el.setAttribute(
+          name,
+          el.getAttribute(name).split(/\s+/).map(renamed).join(" ")
+        );
+      });
+    });
+    root.querySelectorAll("[id]").forEach(function (el) {
+      el.id = el.id + suffix;
+    });
+  }
+
+  function copyScrollPositions(source, copy) {
+    const copied = copy.querySelectorAll("*");
+    source.querySelectorAll("*").forEach(function (el, i) {
+      if (el.scrollTop !== 0) {
+        copied[i].scrollTop = el.scrollTop;
+      }
+      if (el.scrollLeft !== 0) {
+        copied[i].scrollLeft = el.scrollLeft;
+      }
+    });
+  }
+
+  function printStates(page) {
+    const tabsets = Array.from(page.querySelectorAll(".panel-tabset"));
+    const triggers = Array.from(page.querySelectorAll("." + kTrigger))
+      .map(function (el, position) {
+        return {
+          el: el,
+          position: position,
+          index: parseInt(el.getAttribute("data-fragment-index"), 10),
+        };
+      })
+      .sort(function (a, b) {
+        return a.index - b.index || a.position - b.position;
+      });
+    const current = new Map();
+    const states = [new Map(current)];
+    triggers.forEach(function (trigger) {
+      const tabset = trigger.el.parentElement;
+      tabset.querySelectorAll(".panel-tabset").forEach(function (inner) {
+        current.delete(tabsets.indexOf(inner));
+      });
+      current.set(
+        tabsets.indexOf(tabset),
+        parseInt(trigger.el.getAttribute("data-tabset-step"), 10)
+      );
+      states.push(new Map(current));
+    });
+    return states;
+  }
+
   function printPages(deck) {
     const config = deck.getConfig();
     const pages = Array.from(deck.getRevealElement().querySelectorAll(".pdf-page"));
@@ -235,35 +312,30 @@ window.RevealJsTabset = function () {
         });
         return;
       }
-      const count = Math.max.apply(
-        null,
-        tabsets.map(function (tabset) {
-          return panes(tabset).length;
-        })
-      );
+      const states = printStates(page);
       const baseNumber = page.querySelector(".slide-number-pdf");
       const base = baseNumber ? baseNumber.textContent : null;
       let previous = page;
-      for (let k = 0; k < count; k++) {
+      for (let k = 0; k < states.length; k++) {
         let current = page;
         if (k > 0) {
           current = page.cloneNode(true);
-          current.querySelectorAll("[id]").forEach(function (el) {
-            el.removeAttribute("id");
-          });
+          suffixIds(current, "-print-" + k);
           previous.after(current);
+          copyScrollPositions(page, current);
           previous = current;
         }
+        const currentTabsets = Array.from(current.querySelectorAll(".panel-tabset"));
         triggeredTabsets(current).forEach(function (tabset) {
-          applyTabState(tabset, Math.min(k, panes(tabset).length - 1));
+          applyTabState(tabset, states[k].get(currentTabsets.indexOf(tabset)) || 0);
         });
         setPageNumber(current, base, k + 1);
       }
     });
   }
 
-  function activateInitialTabs(slides) {
-    slides.forEach(function (tabset) {
+  function activateInitialTabs(tabsets) {
+    tabsets.forEach(function (tabset) {
       if (isFragmented(tabset)) {
         return;
       }
@@ -290,6 +362,7 @@ window.RevealJsTabset = function () {
         return;
       }
 
+      const fragmentedSlides = [];
       deck
         .getRevealElement()
         .querySelectorAll(".slides section")
@@ -302,11 +375,15 @@ window.RevealJsTabset = function () {
           }
           if (hasFragmentedTabset(slide)) {
             fragmentSlide(slide);
+            fragmentedSlides.push(slide);
           }
         });
 
       const sync = function () {
-        syncTabs(deck.getCurrentSlide());
+        const allShown = deck.isScrollView();
+        fragmentedSlides.forEach(function (slide) {
+          syncTabs(slide, allShown);
+        });
       };
       deck.on("ready", function () {
         activateInitialTabs(
