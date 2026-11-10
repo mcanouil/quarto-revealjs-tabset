@@ -22,8 +22,9 @@ Tabsets are written exactly as they are anywhere in Quarto.
 | `tab-active` | A tabset marked `.no-tabset-fragments` | Which tab is open when the slide arrives, counting from zero, so `1` is the second tab. Emitted as `data-tab-active`. |
 | `tabset-skip-pdf-clone` | A slide | Keep this slide's tabset on one PDF page rather than one page per tab. |
 | `.no-tabset-fragments` | A tabset | Leave this tabset out of the stepping. |
+| `.tabset-fragments` | A tabset | Step through this tabset even when it also carries `.no-tabset-fragments`. It is ignored, with a console warning, inside a tabset that does not step. |
 
-: The attributes and the class. {.striped .hover tbl-colwidths="[24,22,54]"}
+: The attributes and the classes. {.striped .hover tbl-colwidths="[24,22,54]"}
 
 A `tab-active` that is not a whole number, or that names a tab the tabset does not have, falls back to the first tab.
 `tab-active` and the `.active` class on a tab heading are ignored on a tabset that steps, because the first step always shows the first tab.
@@ -40,11 +41,12 @@ Fragment indices that you write with `data-fragment-index` keep Reveal.js's rule
 The state of the tabset follows the step, for every slide with a stepped tabset and not only the current one.
 Going back, opening a link to a fragment, or clicking another tab and then pressing the arrow key all show the tab that belongs to the current step.
 When the step switches the tab, the keyboard focus stays where it was, unless it was on a tab of that tabset.
-In the scroll view every tabset shows its last tab, because all the steps are shown.
+In the scroll view the tab follows the steps, as the scroll position reveals the fragments.
 
 Several tabsets on one slide are navigated one after another.
 A tabset with `.no-tabset-fragments`, and a deck with `fragments: false`, are not stepped.
 A tabset inside a tabset that does not step does not step either, whatever its own class says.
+A tabset that carries the `.fragment` class takes its own first step, and then its tabs follow.
 
 ## Accessibility
 
