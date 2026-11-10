@@ -6,7 +6,7 @@ Quarto's own `tabset-fragments` option does the same, and the extension steps as
 ## Installation
 
 ```bash
-quarto add mcanouil/quarto-revealjs-tabset@1.4.3
+quarto add mcanouil/quarto-revealjs-tabset@1.5.0
 ```
 
 This will install the extension under the `_extensions` subdirectory.

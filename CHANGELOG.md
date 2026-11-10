@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.5.0 (2026-11-10)
+
 - feat: Step through each tabset in the order of its fragments, so a fragment in a later tab shows after that tab.
   Fragment indices no longer collide with the other fragments of the slide, and a tabset with the `.fragment` class takes its own step.
 - feat: Add the `.no-tabset-fragments` class to keep one tabset out of the steps.
