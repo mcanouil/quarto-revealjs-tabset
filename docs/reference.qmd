@@ -44,6 +44,7 @@ In the scroll view every tabset shows its last tab, because all the steps are sh
 
 Several tabsets on one slide are navigated one after another.
 A tabset with `.no-tabset-fragments`, and a deck with `fragments: false`, are not stepped.
+A tabset inside a tabset that does not step does not step either, whatever its own class says.
 
 ## Accessibility
 
@@ -61,7 +62,8 @@ Each page shows the tab of its step, and the page numbers are those of Reveal.js
 With `pdf-separate-fragments: false`, the slide is copied once per tab state, following the same steps as the browser.
 Nested tabsets and several tabsets on one slide get one page for each tab state they can show, not one page for each tab of the largest tabset.
 The copies are numbered `N.1`, `N.2` and so on.
-Their `id` values get the suffix `-print-k`, and the links, `aria-controls`, `aria-labelledby` and `for` values that point to them follow, so the document has no duplicate `id`.
+Their `id` values get the suffix `-print-k`, and the links, `aria-controls`, `aria-labelledby`, `aria-describedby`, `for` and `headers` values that point to them follow, so the document has no duplicate `id` outside SVG.
+Ids inside an SVG keep their values.
 Scroll positions inside the slide are copied to each page.
 Every tab is kept, whatever `pdf-max-pages-per-slide` says.
 
