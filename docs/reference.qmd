@@ -37,8 +37,10 @@ A fragment in a later tab is therefore shown after its own tab, never before.
 
 Fragment indices that you write with `data-fragment-index` keep Reveal.js's rule: indexed fragments come first, in ascending order, and the others follow in document order.
 
-The state of the tabset follows the step.
+The state of the tabset follows the step, for every slide with a stepped tabset and not only the current one.
 Going back, opening a link to a fragment, or clicking another tab and then pressing the arrow key all show the tab that belongs to the current step.
+When the step switches the tab, the keyboard focus stays where it was, unless it was on a tab of that tabset.
+In the scroll view every tabset shows its last tab, because all the steps are shown.
 
 Several tabsets on one slide are navigated one after another.
 A tabset with `.no-tabset-fragments`, and a deck with `fragments: false`, are not stepped.
@@ -56,8 +58,11 @@ The invisible element that carries a tab's step is hidden from assistive technol
 Under Quarto's default, `pdf-separate-fragments: true`, a stepped tabset has one page per step.
 Each page shows the tab of its step, and the page numbers are those of Reveal.js.
 
-With `pdf-separate-fragments: false`, the slide is copied once per tab.
-The copies are numbered `N.1`, `N.2` and so on, and carry no `id`, so the document has no duplicates.
+With `pdf-separate-fragments: false`, the slide is copied once per tab state, following the same steps as the browser.
+Nested tabsets and several tabsets on one slide get one page for each tab state they can show, not one page for each tab of the largest tabset.
+The copies are numbered `N.1`, `N.2` and so on.
+Their `id` values get the suffix `-print-k`, and the links, `aria-controls`, `aria-labelledby` and `for` values that point to them follow, so the document has no duplicate `id`.
+Scroll positions inside the slide are copied to each page.
 Every tab is kept, whatever `pdf-max-pages-per-slide` says.
 
 Opt a slide out with `tabset-skip-pdf-clone`, which keeps its tabset on a single page showing the first tab.
