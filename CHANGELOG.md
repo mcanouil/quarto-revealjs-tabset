@@ -3,9 +3,8 @@
 ## Unreleased
 
 - feat: Step through each tabset in the order of its fragments, so a fragment in a later tab shows after that tab.
-  Fragment indices no longer collide with the other fragments of the slide.
+  Fragment indices no longer collide with the other fragments of the slide, and a tabset with the `.fragment` class takes its own step.
 - feat: Add the `.no-tabset-fragments` class to keep one tabset out of the steps.
-  A tabset with the `.fragment` class takes its own first step.
 - feat: Step aside when Quarto's `tabset-fragments` option is on, and log one line to the browser console.
 - feat: Number the PDF page copies `N.1`, `N.2` and so on when `pdf-separate-fragments` is `false`.
   Nested tabsets and several tabsets on one slide get one page per tab state.
@@ -15,7 +14,7 @@
 - fix: Give the PDF page copies unique `id` values, and update the links that point to them.
   Ids inside SVG keep their values.
 - fix: Ignore `tab-active` on a tabset that steps through fragments, because the first step always shows the first tab.
-- fix: Wait for tabby before the first tab sync, so `tab-active` and a deep link to a fragment open on the right tab in a deck that loads before tabby.
+- fix: Open `tab-active` tabs and deep links to a fragment on the right tab, which failed when the deck loaded before tabby.
 
 ## 1.4.3 (2026-09-23)
 
