@@ -20,8 +20,8 @@ revealjs-plugins:
 This extension brings proper tabset support to Reveal.js presentations.
 
 - Navigate through tabs using arrow keys or space bar.
-- Tabs are treated as fragments.
-- ARIA roles are wired automatically.
+- Tabs and the fragments inside them arrive in document order.
+- Quarto's own tab semantics are kept.
 - PDF export support.
 
 ## How it works
@@ -115,8 +115,9 @@ Summary of the topic.
 ## Initial Active Tab via `tab-active`
 
 The second tab opens first thanks to `tab-active="1"`; Pandoc emits it as `data-tab-active="1"`.
+It needs `.no-tabset-fragments`, because a tabset that steps always opens on its first tab.
 
-::: {.panel-tabset tab-active="1"}
+::: {.panel-tabset .no-tabset-fragments tab-active="1"}
 
 ### First
 
@@ -152,8 +153,8 @@ This tab is hidden during PDF export for this slide only.
 
 ## Key Features
 
-1. **Fragment Navigation**: Tabs are treated as fragments, allowing smooth navigation.
-2. **ARIA Semantics**: `role="tablist"`, `role="tab"`, and `role="tabpanel"` are applied automatically.
+1. **Fragment Order**: Tabs and fragments are stepped in document order.
+2. **Tabby Semantics**: Quarto's tab roles and keyboard handling stay as they are.
 3. **PDF Export**: Each tab appears on its own PDF page automatically, with per-slide opt-out.
 4. **Multiple Tabsets**: Support for multiple tabsets per slide.
 5. **Nested Fragments**: Fragments within tabs are properly indexed.

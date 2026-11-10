@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+- feat: Step through each tabset in the order of its fragments, so a fragment in a later tab shows after that tab.
+  Fragment indices no longer collide with the other fragments of the slide, and a tabset with the `.fragment` class takes its own step.
+- feat: Add the `.no-tabset-fragments` class to keep one tabset out of the steps.
+- feat: Step aside when Quarto's `tabset-fragments` option is on, and log one line to the browser console.
+- feat: Number the PDF page copies `N.1`, `N.2` and so on when `pdf-separate-fragments` is `false`.
+  Nested tabsets and several tabsets on one slide get one page per tab state.
+- fix: Show the tab that matches the fragment state after backward navigation, a deep link, a click on a tab, or when the scroll view reveals a fragment.
+- fix: Leave the tab roles, `aria-selected` and `tabindex` to tabby, so the Tab order and the Home and End keys work in a deck.
+  The keyboard focus stays where it was when a step switches the tab.
+- fix: Give the PDF page copies unique `id` values, and update the links that point to them.
+  Ids inside SVG keep their values.
+- fix: Ignore `tab-active` on a tabset that steps through fragments, because the first step always shows the first tab.
+- fix: Open `tab-active` tabs and deep links to a fragment on the right tab, which failed when the deck loaded before tabby.
+
 ## 1.4.3 (2026-09-23)
 
 ### Documentation
