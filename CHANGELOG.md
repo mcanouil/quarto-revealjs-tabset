@@ -12,6 +12,7 @@
 - fix: Leave the tab roles, `aria-selected` and `tabindex` to tabby, so the Tab order and the Home and End keys work in a deck.
   The keyboard focus stays where it was when a step switches the tab.
 - fix: Give the PDF page copies unique `id` values, and update the links that point to them.
+  Ids inside SVG keep their values.
 - fix: Ignore `tab-active` on a tabset that steps through fragments, because the first step always shows the first tab.
 
 ## 1.4.3 (2026-09-23)
