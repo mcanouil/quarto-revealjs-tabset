@@ -153,6 +153,19 @@ window.RevealJsTabset = function () {
     );
   }
 
+  function clickKeepingFocus(tabset, link) {
+    const focused = document.activeElement;
+    const focusOnTabs = tabLinks(tabset).includes(focused);
+    link.click();
+    if (!focusOnTabs) {
+      if (focused && focused !== document.body) {
+        focused.focus({ preventScroll: true });
+      } else {
+        link.blur();
+      }
+    }
+  }
+
   function syncTabs(slide, allShown) {
     if (!slide) {
       return;
@@ -163,16 +176,7 @@ window.RevealJsTabset = function () {
       }
       const link = tabLinks(tabset)[visibleStep(tabset, allShown)];
       if (link && link.getAttribute("aria-selected") !== "true") {
-        const focused = document.activeElement;
-        const focusOnTabs = tabLinks(tabset).includes(focused);
-        link.click();
-        if (!focusOnTabs) {
-          if (focused && focused !== document.body) {
-            focused.focus({ preventScroll: true });
-          } else {
-            link.blur();
-          }
-        }
+        clickKeepingFocus(tabset, link);
       }
     });
   }
@@ -355,7 +359,7 @@ window.RevealJsTabset = function () {
       const raw = tabset.getAttribute(kInitialTab);
       const index = raw === null || raw === "" ? NaN : parseInt(raw, 10);
       if (links.length > 1 && index > 0 && index < links.length) {
-        links[index].click();
+        clickKeepingFocus(tabset, links[index]);
       }
     });
   }
