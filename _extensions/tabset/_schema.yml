@@ -12,6 +12,7 @@ attributes:
       description: >
         Zero-based index of the tab to activate when the tabset first appears.
         Emitted as `data-tab-active`.
+        Only applies to a tabset with the `.no-tabset-fragments` class, because a tabset that steps always opens on its first tab.
         Out-of-range or non-integer values fall back to `0`.
       default: 0
   _any:

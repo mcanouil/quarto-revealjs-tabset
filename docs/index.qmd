@@ -1,7 +1,7 @@
 ---
 title: "RevealJS Tabset"
 subtitle: "Quarto tabsets that work on slides."
-description: "What the tabset plugin adds to a RevealJS presentation, how to enable it, and how tabs become fragments."
+description: "What the tabset plugin adds to a RevealJS presentation, how to enable it, and how the arrow keys step through tabs and fragments."
 authors:
   - name: "Mickaël CANOUIL, _Ph.D._"
     orcid: "0000-0002-3396-4549"
@@ -11,8 +11,10 @@ authors:
 Quarto's `.panel-tabset` is a good way to put three versions of the same thing on one page.
 On a slide it is awkward: the tabs are there, and stepping through a talk with the arrow keys does not reach them, so the speaker has to leave the keyboard and click.
 
-`tabset` makes each tab a fragment.
-Arrow keys move through them like anything else on the slide, the ARIA roles are set for assistive technology, and a PDF export puts each tab on its own page.
+`tabset` steps through the tabs with the arrow keys.
+A tab arrives when the arrow keys reach it, and the fragments written inside a tab arrive with that tab, in document order.
+A PDF export gives each tab its own page.
+Quarto's `tabset-fragments` option does the same work, and the extension steps aside when it is on.
 
 ## Installation
 
@@ -68,7 +70,7 @@ RevealJS.
 
 ## Links
 
-- [Reference](reference.qmd) for the attributes and the PDF behaviour.
+- [Reference](reference.qmd) for the attributes, the classes and the PDF behaviour.
 - [Examples](examples.qmd) for the source behind the deck.
 - [Preview deck](preview.html) to step through.
 - [Changelog](changelog.qmd) for what each release changed.

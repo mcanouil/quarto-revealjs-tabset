@@ -1,6 +1,7 @@
 # Reveal.js Tabset Extension For Quarto
 
-A Reveal.js plugin that brings proper tabset support to Quarto presentations: each tab becomes a fragment, so the arrow keys step through them, the ARIA roles are set for assistive technology, and a PDF export puts each tab on its own page.
+A Reveal.js plugin that brings proper tabset support to Quarto presentations: the arrow keys step through the tabs and the fragments inside them in document order, and a PDF export gives each tab its own page.
+Quarto's own `tabset-fragments` option does the same, and the extension steps aside when that option is on.
 
 ## Installation
 
@@ -13,7 +14,7 @@ If you are using version control, you will want to check in this directory.
 
 ## Documentation
 
-The full documentation lives at <https://m.canouil.dev/quarto-revealjs-tabset/>: the attributes, the fragment navigation, the ARIA roles, the PDF behaviour, and a deck to step through.
+The full documentation lives at <https://m.canouil.dev/quarto-revealjs-tabset/>: the attributes and classes, the fragment order, the PDF behaviour, the relation to Quarto's `tabset-fragments` option, and a deck to step through.
 
 [`example.qmd`](example.qmd) is a short, standalone starting point you can copy.
 

@@ -1,6 +1,6 @@
 ---
 title: "Tabset in a deck"
-subtitle: "Tabs as fragments"
+subtitle: "Tabs stepped by the arrow keys"
 description: "A RevealJS deck with the tabset plugin enabled, so the tabs can be stepped through with the arrow keys."
 format:
   revealjs:
@@ -12,7 +12,7 @@ revealjs-plugins:
 
 ## A tabset
 
-Press the arrow keys: each tab is a fragment, so they arrive in turn.
+Press the arrow keys: the tabs arrive in turn.
 
 ::: {.panel-tabset}
 
@@ -33,8 +33,9 @@ And the third.
 ## Opening on a given tab
 
 `tab-active` selects which tab is open when the slide arrives, counting from zero.
+It needs `.no-tabset-fragments`, because a tabset that steps always opens on its first tab.
 
-::: {.panel-tabset tab-active="2"}
+::: {.panel-tabset .no-tabset-fragments tab-active="2"}
 
 ### One
 
