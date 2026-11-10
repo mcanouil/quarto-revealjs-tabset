@@ -14,6 +14,7 @@
 - fix: Give the PDF page copies unique `id` values, and update the links that point to them.
   Ids inside SVG keep their values.
 - fix: Ignore `tab-active` on a tabset that steps through fragments, because the first step always shows the first tab.
+- fix: Wait for tabby before the first tab sync, so `tab-active` and a deep link to a fragment open on the right tab in a deck that loads before tabby.
 
 ## 1.4.3 (2026-09-23)
 

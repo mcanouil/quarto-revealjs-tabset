@@ -336,9 +336,19 @@ window.RevealJsTabset = function () {
     });
   }
 
-  function activateInitialTabs(tabsets) {
+  function onceTabbyIsReady(callback) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(callback, 0);
+      });
+    } else {
+      callback();
+    }
+  }
+
+  function activateInitialTabs(tabsets, stepping) {
     tabsets.forEach(function (tabset) {
-      if (isFragmented(tabset)) {
+      if (stepping && isFragmented(tabset)) {
         return;
       }
       const links = tabLinks(tabset);
@@ -360,7 +370,16 @@ window.RevealJsTabset = function () {
         return;
       }
       const config = deck.getConfig();
-      if (config.fragments === false) {
+      const stepping = config.fragments !== false;
+      deck.on("ready", function () {
+        onceTabbyIsReady(function () {
+          activateInitialTabs(
+            Array.from(deck.getRevealElement().querySelectorAll(".slides .panel-tabset")),
+            stepping
+          );
+        });
+      });
+      if (!stepping) {
         return;
       }
 
@@ -396,15 +415,13 @@ window.RevealJsTabset = function () {
             syncTabs(slide, allShown);
           });
       };
-      deck.on("ready", function () {
-        activateInitialTabs(
-          Array.from(deck.getRevealElement().querySelectorAll(".slides .panel-tabset"))
-        );
-      });
       deck.on("pdf-ready", function () {
         printPages(deck);
       });
-      ["ready", "slidechanged", "fragmentshown", "fragmenthidden"].forEach(
+      deck.on("ready", function () {
+        onceTabbyIsReady(sync);
+      });
+      ["slidechanged", "fragmentshown", "fragmenthidden"].forEach(
         function (name) {
           deck.on(name, sync);
         }
