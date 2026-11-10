@@ -1,6 +1,5 @@
 /**
  * @module RevealJsTabset
- * @version 1.3.0
  * @license MIT
  * @copyright 2026 Mickaël Canouil
  * @author Mickaël Canouil
