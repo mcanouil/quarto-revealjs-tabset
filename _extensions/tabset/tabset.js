@@ -158,17 +158,10 @@ window.RevealJsTabset = function () {
       return;
     }
     slide.querySelectorAll(".panel-tabset").forEach(function (tabset) {
-      const triggers = tabset.querySelectorAll(
-        ":scope > ." + kTrigger + (allShown ? "" : ".visible")
-      );
-      if (triggers.length === 0 && !tabset.querySelector(":scope > ." + kTrigger)) {
+      if (!tabset.querySelector(":scope > ." + kTrigger)) {
         return;
       }
-      let k = 0;
-      triggers.forEach(function (trigger) {
-        k = Math.max(k, parseInt(trigger.getAttribute("data-tabset-step"), 10));
-      });
-      const link = tabLinks(tabset)[k];
+      const link = tabLinks(tabset)[visibleStep(tabset, allShown)];
       if (link && link.getAttribute("aria-selected") !== "true") {
         const focused = document.activeElement;
         const focusOnTabs = tabLinks(tabset).includes(focused);
@@ -201,10 +194,10 @@ window.RevealJsTabset = function () {
     });
   }
 
-  function visibleStep(tabset) {
+  function visibleStep(tabset, allShown) {
     let k = 0;
     tabset
-      .querySelectorAll(":scope > ." + kTrigger + ".visible")
+      .querySelectorAll(":scope > ." + kTrigger + (allShown ? "" : ".visible"))
       .forEach(function (trigger) {
         k = Math.max(k, parseInt(trigger.getAttribute("data-tabset-step"), 10));
       });
@@ -227,28 +220,37 @@ window.RevealJsTabset = function () {
   }
 
   function suffixIds(root, suffix) {
+    const outsideSvg = function (el) {
+      return el.closest("svg") === null;
+    };
     const ids = new Set(
-      Array.from(root.querySelectorAll("[id]")).map(function (el) {
-        return el.id;
-      })
+      Array.from(root.querySelectorAll("[id]"))
+        .filter(outsideSvg)
+        .map(function (el) {
+          return el.id;
+        })
     );
     const renamed = function (token) {
       return ids.has(token) ? token + suffix : token;
     };
-    root.querySelectorAll("[href^='#']").forEach(function (el) {
-      el.setAttribute("href", "#" + renamed(el.getAttribute("href").slice(1)));
-    });
-    ["aria-controls", "aria-labelledby", "for"].forEach(function (name) {
-      root.querySelectorAll("[" + name + "]").forEach(function (el) {
+    Array.from(root.querySelectorAll("[href^='#']"))
+      .filter(outsideSvg)
+      .forEach(function (el) {
+        el.setAttribute("href", "#" + renamed(el.getAttribute("href").slice(1)));
+      });
+    ["aria-controls", "aria-labelledby", "aria-describedby", "for", "headers"].forEach(function (name) {
+      Array.from(root.querySelectorAll("[" + name + "]")).filter(outsideSvg).forEach(function (el) {
         el.setAttribute(
           name,
           el.getAttribute(name).split(/\s+/).map(renamed).join(" ")
         );
       });
     });
-    root.querySelectorAll("[id]").forEach(function (el) {
-      el.id = el.id + suffix;
-    });
+    Array.from(root.querySelectorAll("[id]"))
+      .filter(outsideSvg)
+      .forEach(function (el) {
+        el.id = el.id + suffix;
+      });
   }
 
   function copyScrollPositions(source, copy) {
@@ -362,7 +364,6 @@ window.RevealJsTabset = function () {
         return;
       }
 
-      const fragmentedSlides = [];
       deck
         .getRevealElement()
         .querySelectorAll(".slides section")
@@ -375,15 +376,25 @@ window.RevealJsTabset = function () {
           }
           if (hasFragmentedTabset(slide)) {
             fragmentSlide(slide);
-            fragmentedSlides.push(slide);
           }
         });
 
       const sync = function () {
+        if (deck.isPrintView()) {
+          return;
+        }
         const allShown = deck.isScrollView();
-        fragmentedSlides.forEach(function (slide) {
-          syncTabs(slide, allShown);
-        });
+        deck
+          .getSlides()
+          .filter(function (slide) {
+            return (
+              !slide.querySelector("section") &&
+              slide.querySelector("." + kTrigger) !== null
+            );
+          })
+          .forEach(function (slide) {
+            syncTabs(slide, allShown);
+          });
       };
       deck.on("ready", function () {
         activateInitialTabs(
