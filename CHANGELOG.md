@@ -2,21 +2,17 @@
 
 ## Unreleased
 
-- feat: Step through each tabset in the order of its fragments, so a fragment in a later tab appears after the tab that holds it.
+- feat: Step through each tabset in the order of its fragments, so a fragment in a later tab shows after that tab.
   Fragment indices no longer collide with the other fragments of the slide.
-- feat: Add the `.no-tabset-fragments` class to keep one tabset out of the stepping.
-- feat: Print one PDF page per tab, numbered `N.1`, `N.2` and so on, when `pdf-separate-fragments` is `false`.
-  Every tab is kept, whatever `pdf-max-pages-per-slide` says.
+- feat: Add the `.no-tabset-fragments` class to keep one tabset out of the steps.
 - feat: Step aside when Quarto's `tabset-fragments` option is on, and log one line to the browser console.
-- fix: Show the tab that matches the fragment state after backward navigation, a deep link, or a click on a tab followed by the next fragment.
-- fix: Leave the tab roles, `aria-selected` and `tabindex` values to tabby, so the Tab order and the Home and End keys work on a tabset in a deck.
-- fix: Ignore `tab-active` on a tabset that steps with fragments, because the first step always shows the first tab.
-- fix: Number and copy the PDF pages of nested tabsets and of several tabsets on one slide from the step sequence, so each tab state gets one page.
-- fix: Suffix the `id` values of the PDF page copies with `-print-k` and update the links that point to them, rather than removing them.
-  Scroll positions inside the slide are copied to each page.
-- fix: Keep the keyboard focus where it was when a step switches the tab, and sync the tabsets of every slide rather than the current one only.
-- fix: Show the last tab of each tabset in the scroll view.
-- fix: Warn once for each ignored `.tabset-fragments` class and name the first tab of that tabset.
+- feat: Number the PDF page copies `N.1`, `N.2` and so on when `pdf-separate-fragments` is `false`.
+  Nested tabsets and several tabsets on one slide get one page per tab state.
+- fix: Show the tab that matches the fragment state after backward navigation, a deep link, a click on a tab, or in the scroll view.
+- fix: Leave the tab roles, `aria-selected` and `tabindex` to tabby, so the Tab order and the Home and End keys work in a deck.
+  The keyboard focus stays where it was when a step switches the tab.
+- fix: Give the PDF page copies unique `id` values, and update the links that point to them.
+- fix: Ignore `tab-active` on a tabset that steps through fragments, because the first step always shows the first tab.
 
 ## 1.4.3 (2026-09-23)
 
